@@ -5,6 +5,15 @@ module.exports = {
     try {
       const { email, name, password } = req.body;
 
+      const emailAlreadyExists = await User.findOne({
+        email,
+      });
+
+      if (emailAlreadyExists)
+        return res.status(409).send({
+          message: "Email already exists.",
+        });
+
       const createdUser = await User.create({
         email,
         name,
