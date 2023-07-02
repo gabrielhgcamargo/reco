@@ -1,6 +1,8 @@
 const { Router } = require("express");
 
 const UserController = require("../Controllers/UserController");
+const UserLogin = require("../Controllers/LoginController");
+const LoginController = require("../Controllers/LoginController");
 
 const router = Router();
 
@@ -9,8 +11,9 @@ router.post("/users", UserController.createUser);
 
 // List all users (not going to be used in the application)
 router.get("/users", UserController.listAllUsers);
-// Login user
 
+// Login user
+router.post("/login", LoginController.login);
 // Logout user
 
 // Profile user
