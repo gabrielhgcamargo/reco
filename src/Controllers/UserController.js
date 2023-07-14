@@ -47,4 +47,61 @@ module.exports = {
       });
     }
   },
+
+  async login(req, res) {
+    const { email, password } = req.body;
+
+    try {
+      const emailExists = await User.findOne({
+        email,
+      });
+
+      if (!emailExists)
+        return res.status(404).send({
+          message: "This email does not exist.",
+        });
+
+      const correctPassword = await User.findOne({
+        password,
+      }).where({
+        email,
+      });
+
+      if (!correctPassword)
+        return res.status(401).send({
+          message: "Incorrect password.",
+        });
+
+      return res.status(200).send({
+        data: correctPassword,
+      });
+    } catch (error) {
+      console.error("Error in login:", error);
+      return res.status(400).json({
+        message: "Failed to login : " + error,
+      });
+    }
+  },
+
+  async preferences(req, res) {
+    const { preferences } = req.body;
+    const { userEmail } = req.params;
+
+    try {
+      const user = await User.findOne({ email: userEmail });
+
+      if (!user) return res.status(404).json({ message: "User not found." });
+
+      user.preferences = preferences;
+
+      await user.save();
+
+      return res.status(200).json(user);
+    } catch (error) {
+      console.error("Error in add/change user's preferences:", error);
+      return res.status(400).json({
+        message: "Error in add/change user's preferences: " + error,
+      });
+    }
+  },
 };

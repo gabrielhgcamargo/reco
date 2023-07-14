@@ -1,8 +1,6 @@
 const { Router } = require("express");
 
 const UserController = require("../Controllers/UserController");
-const UserLogin = require("../Controllers/LoginController");
-const LoginController = require("../Controllers/LoginController");
 
 const router = Router();
 
@@ -13,8 +11,11 @@ router.post("/users", UserController.createUser);
 router.get("/users", UserController.listAllUsers);
 
 // Login user
-router.post("/login", LoginController.login);
+router.post("/login", UserController.login);
 // Logout user
+
+// Add or Change preferences
+router.patch("/preferences/:userEmail", UserController.preferences);
 
 // Profile user
 
